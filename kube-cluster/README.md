@@ -18,7 +18,7 @@ Use this deployment to easily deploy a Kubernetes cluster on Google Cloud Platfo
 
 * This contains your authentication required for Terraform to talk to the Google API.
 
-You can get it under 
+You can get it under
 ```
 Google Cloud Platform -> IAM & admin -> Service accounts -> Create service account -> attach role "Kubernetes Engine Admin" -> Create Key.
 ```
@@ -27,11 +27,11 @@ Google Cloud Platform -> IAM & admin -> Service accounts -> Create service accou
 
 ### Create config.tfvars file
 
-Create config.tfvars file with following content: 
+Create config.tfvars file with following content:
 
 ```
 cluster_name            =    "example-name"
-node_count              =    "2"                                
+node_count              =    "2"
 cpath                   =    "PATH/service_account_key.json"    # Path where ur service account key is located
 project                 =    "example-240119"                   # Project_id
 region                  =    "us-central1"                      # Region
@@ -40,8 +40,8 @@ node_name               =    "example"
 
 --------------------------------------------------------------------------------------------------------------
 
-  
-### Variables  
+
+### Variables
 
 ```variables.tf``` holds the definition of the elements that can be configured in your
 deployment script.
@@ -55,7 +55,7 @@ If you do not want to set these values on every run you can create a file called
 
 Now that we know what we want to build and also how we want to parametrize our script we are ready to build the ```kubecluster-deployment.tf```  The code snippets below are extracted from this file.
 
-## USAGE 
+## USAGE
 
 ### Initialize working directory.
 
