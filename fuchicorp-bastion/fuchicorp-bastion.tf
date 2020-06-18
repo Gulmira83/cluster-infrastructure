@@ -30,15 +30,24 @@ resource "google_compute_instance" "vm_instance" {
   export GIT_TOKEN="${var.git_common_token}"
   echo 'export GIT_TOKEN="${var.git_common_token}"' >> /root/.bashrc
   sleep 10
+  sudo su -
   yum install python-pip git jq wget unzip vim centos-release-scl scl-utils-build -y
   yum install  python33 gcc python3 -y
-  sudo yum check-update
-  sudo yum install -y yum-utils device-mapper-persistent-data lvm2
-  sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-  sudo yum install docker-ce-17.12.1.ce
-  sudo systemctl start docker
-  sudo systemctl enable docker
-  sudo chmod 777 /var/run/docker.sock
+  yum check-update && yum upgrade   
+  yum install -y yum-utils device-mapper-persistent-data lvm2
+  yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+  yum install docker-ce-17.12.1.ce
+  systemctl start docker
+  systemctl enable docker
+  chmod 777 /var/run/docker.sock
+  yum install curl -y
+  curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  chmod +x /usr/local/bin/docker-compose
+  yum pip install docker-compose
+  docker–compose version
+
+
+  
 
   git clone -b master https://github.com/fuchicorp/common_scripts.git "/common_scripts"
   python3 -m pip install -r "/common_scripts/bastion-scripts/requirements.txt"
