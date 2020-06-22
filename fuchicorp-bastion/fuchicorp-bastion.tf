@@ -4,9 +4,26 @@ provider "google" {
   zone        = "${var.zone}"
 }
 
+
+
+resource "google_compute_firewall" "default" {
+  name    = "bastion-network-firewall"
+  network = "${google_compute_instance.vm_instance.network_interface.0.network}"
+
+  allow { protocol = "icmp" }
+  allow { protocol = "tcp" ports = ["80", "443"] }
+
+  source_ranges = ["0.0.0.0/0"]
+  source_tags = ["bastion-firewall"]
+}
+
+
+
 resource "google_compute_instance" "vm_instance" {
-  name         = "${var.instance_name}"
+  name         = "bastion-${replace(var.google_domain_name, ".", "-")}"
   machine_type = "${var.machine_type}"
+
+  tags = ["bastion-firewall"]
 
   boot_disk {
     initialize_params {
@@ -18,9 +35,10 @@ resource "google_compute_instance" "vm_instance" {
 
   network_interface {
     network       = "default"
+    # network       = "${google_compute_network.vpc_network.name}"
     access_config = {}
   }
-
+  
   metadata {
     sshKeys = "${var.gce_ssh_user}:${file(var.gce_ssh_pub_key_file)}"
   }
@@ -30,15 +48,21 @@ resource "google_compute_instance" "vm_instance" {
   export GIT_TOKEN="${var.git_common_token}"
   echo 'export GIT_TOKEN="${var.git_common_token}"' >> /root/.bashrc
   sleep 10
+  sudo su -
   yum install python-pip git jq wget unzip vim centos-release-scl scl-utils-build -y
   yum install  python33 gcc python3 -y
+
   sudo yum check-update
   sudo yum install -y yum-utils device-mapper-persistent-data lvm2
   sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-  sudo yum install docker-ce-17.12.1.ce
+  sudo yum install -y docker-ce-17.12.1.ce
   sudo systemctl start docker
   sudo systemctl enable docker
   sudo chmod 777 /var/run/docker.sock
+  sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  sudo chmod +x /usr/local/bin/docker-compose
+  docker–compose version
+  python3 -m pip install awscli
 
   git clone -b master https://github.com/fuchicorp/common_scripts.git "/common_scripts"
   python3 -m pip install -r "/common_scripts/bastion-scripts/requirements.txt"
@@ -87,8 +111,9 @@ EOF
 }
 
 resource "google_dns_record_set" "fuchicorp" {
-  managed_zone = "${var.managed_zone}"
-  name         = "bastion.fuchicorp.com."
+  depends_on = ["google_compute_instance.vm_instance"]
+  managed_zone = "cluster-infrastructure-zone"
+  name         = "bastion.${var.google_domain_name}."
   type         = "A"
   ttl          = 300
   rrdatas      = ["${google_compute_instance.vm_instance.network_interface.0.access_config.0.nat_ip}"]
