@@ -52,6 +52,13 @@ resource "google_compute_instance" "vm_instance" {
   yum install python-pip git jq wget unzip vim centos-release-scl scl-utils-build -y
   yum install  python33 gcc python3 -y
 
+
+  sudo curl https://storage.googleapis.com/kubernetes-helm/helm-v2.14.0-linux-amd64.tar.gz > ./helm.tar.gz
+  sudo tar -xvf ./helm.tar.gz
+  sudo mv linux-amd64/*  /usr/local/bin/
+  helm version
+
+
   sudo yum check-update
   sudo yum install -y yum-utils device-mapper-persistent-data lvm2
   sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
@@ -64,6 +71,15 @@ resource "google_compute_instance" "vm_instance" {
   docker–compose version
   python3 -m pip install awscli
 
+  sudo yum install java-1.8.0-openjdk
+  sudo yum install groovy -y
+
+  # sudo wget https://get.helm.sh/helm-v2.14.0-linux-amd64.tar.gz
+  # sudo tar -xvzf helm-v2.14.0-linux-amd64.tar.gz
+  # sudo mv linux-amd64/* ./
+  # ./helm version
+
+
   git clone -b master https://github.com/fuchicorp/common_scripts.git "/common_scripts"
   python3 -m pip install -r "/common_scripts/bastion-scripts/requirements.txt"
   cd /common_scripts/bastion-scripts/ && python3 sync-users.py
@@ -74,18 +90,13 @@ resource "google_compute_instance" "vm_instance" {
   
   sudo yum install bind-utils -y
 
-
+  
   wget https://releases.hashicorp.com/terraform/0.11.14/terraform_0.11.14_linux_amd64.zip --no-check-certificate
   unzip  terraform_0.11.14_linux_amd64.zip
   mv terraform /usr/bin
   chmod +x /usr/bin/terraform
 
-  wget https://get.helm.sh/helm-v2.11.0-linux-amd64.tar.gz
-  tar -xvzf helm-v2.11.0-linux-amd64.tar.gz
-  mv linux-amd64/helm /usr/bin/helm
-
-  curl https://sdk.cloud.google.com | bash && exec -l $SHELL
-
+  
   echo "30 * * * * source /root/.bashrc && cd /common_scripts/bastion-scripts/ && python3 sync-users.py" >> /sync-crontab
   crontab /sync-crontab
 
