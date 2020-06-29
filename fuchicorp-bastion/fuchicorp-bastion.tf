@@ -55,8 +55,8 @@ resource "google_compute_instance" "vm_instance" {
 
   sudo curl https://storage.googleapis.com/kubernetes-helm/helm-v2.14.0-linux-amd64.tar.gz > ./helm.tar.gz
   sudo tar -xvf ./helm.tar.gz
-  sudo mv linux-amd64/*  /usr/local/bin/
-  helm version
+  sudo mv ./linux-amd64/*  /usr/local/bin/
+  ./helm version
 
 
   sudo yum check-update
