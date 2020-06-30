@@ -74,7 +74,7 @@ resource "google_compute_instance" "vm_instance" {
   python3 -m pip install awscli
 
   echo "Installing java and groovy"
-  sudo yum install java-1.8.0-openjdk
+  sudo yum install java-1.8.0-openjdk -y 
   sudo yum install groovy -y
 
   echo "Cloning common scripts and setting crontab"
