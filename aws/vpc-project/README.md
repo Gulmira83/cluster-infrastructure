@@ -13,10 +13,10 @@ Next you will have to update you access and secret key in .aws/credentials
 Also create manually bucket in your aws account, and update the bucket name in backend.tf!
 
 Run the following commands:
-1) source setenv.sh configurations/us-east-1/vpc.tfvars 
+1) terraform init
 This command will set your environment,download all the plugins  and initialize a backend "s3"
 
-2) terraform apply -var-file configuarations/us-east-1/vpc.tfvars 
+2) terraform apply -var-file=configuarations/us-east-1/vpc.tfvars 
 This command will create 24 resources all needed for an infrastructure such as vpc, with public and private subnets, nat gateway, internet gateway with security groups and DynamoDB.
 
 
