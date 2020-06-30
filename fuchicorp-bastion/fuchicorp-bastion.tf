@@ -108,7 +108,7 @@ resource "null_resource" "local_generate_kube_config" {
   provisioner "local-exec" {
     command = <<EOF
     #!/bin/bash
-    until ping -c1 ${google_compute_instance.vm_instance.network_interface.0.access_config.0.nat_ip} >/dev/null 2>&1; do echo "Tring to connect bastion host <${google_compute_instance.vm_instance.network_interface.0.access_config.0.nat_ip}> "; sleep 2; done
+    until ping -c1 ${google_compute_instance.vm_instance.network_interface.0.access_config.0.nat_ip} >/dev/null 2>&1; do echo "Tring to connect bastion host '${google_compute_instance.vm_instance.network_interface.0.access_config.0.nat_ip}' "; sleep 2; done
     wget https://raw.githubusercontent.com/fuchicorp/common_scripts/master/set-environments/kubernetes/set-kube-config.sh 
     ENDPOINT=$(kubectl get endpoints kubernetes | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
     bash set-kube-config.sh $ENDPOINT
