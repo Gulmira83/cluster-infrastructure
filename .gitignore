@@ -5,3 +5,4 @@
 *backend.tf
 *project.yaml*
 *config
+aws/vpc-project/deployments/terraform/backend.tf
