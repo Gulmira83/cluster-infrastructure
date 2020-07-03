@@ -44,7 +44,6 @@ resource "aws_subnet" "private3" {
   vpc_id = "${aws_vpc.vpc_eks.id}" 
   cidr_block = "${var.cidr_block3_private}"
   availability_zone = "${var.az3}"
-  
 }
 
 resource "aws_subnet" "private4" {
