@@ -1,8 +1,3 @@
-variable "eks_subnets" {
-  type        = "list"
-  description = "Please provide subnets as <List>"
-  default     = [""]
-}
 
 variable "eks_tags" {
   type        = "map"
@@ -12,28 +7,55 @@ variable "eks_tags" {
     environment = "dev"
   }
 }
-
-variable "eks_vpc_id" {
-  default     = ""
-  description = "Please provide single VPC ID as <String>"
+variable "node_max_size" {
+  default = "3"
 }
 
+variable "node_min_size" {
+  default = "2"
+}
+
+variable "node_desired_capacity" {
+  default = "2"
+}
+
+
 variable "eks_name" {
-  default     = ""
+  default     = "fuchicorp"
   description = "Please provide the EKS Name as <String>"
 }
 
-variable "eks_kube_config_path" {
-  default     = "./"
-  description = "Please provide the path for kube configuration as <String>"
-}
-
-variable "eks_map_users" {
-  type        = "list"
-  description = "Please provide the list of members as <List>"
-}
-
-variable "eks_region" {
+variable "region" {
   default     = "us-east-1"
   description = "Please provide the region for EKS as <String>"
+}
+
+
+variable "cluster_version" {
+  default     = "1.15"
+  description = "Please provide the version for EKS as <String>"
+}
+
+variable "security_group_ids" {
+  type = "list"
+  default = []
+  description = "Please provide the security groups for EKS as [<String>,]"
+}
+
+
+variable "public_subnets" {
+  type = "list"
+  default     = []
+  description = "Please provide the public subnet for EKS as [<String>]"
+}
+
+variable "instance_type" {
+  default = "t2.micro"
+  description = "Instance type for EKS cluster."
+}
+
+variable "private_subnets" {
+  type = "list"
+  default     = []
+  description = "Please provide the private subnet for EKS as [<String>]"
 }
