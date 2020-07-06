@@ -6,3 +6,4 @@
 *project.yaml*
 *config
 aws/vpc-project/deployments/terraform/backend.tf
+*DS_Store
